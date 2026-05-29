@@ -1,8 +1,8 @@
-import {v4 as uuid4 } from "uuid";
 import {ExportType} from "../types/export.types";
+import { randomUUID } from "crypto";
 
 export function createJobMetadata(consumerId : string, exportType: ExportType){
-    const jobId = uuid4();
+    const jobId = randomUUID();
     const timestamp = Date.now();
 
     const outputFileName = `${exportType}_${consumerId}_${timestamp}.csv`;

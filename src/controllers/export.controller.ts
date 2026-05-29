@@ -3,7 +3,7 @@ import { createJobMetadata } from "../utils/export.util";
 import { getConsumerId } from "../utils/consumer.util";
 import prisma from "../prisma";
 
-import {startFullExportJob} from "../jobs/export.job";
+import {startFullExportJob, startIncrementalExportJob, startDeltaExportJob} from "../jobs/export.job";
 
 export async function fullExport(req: Request, res: Response) {
   try {
@@ -36,6 +36,11 @@ export async function incrementalExport(req: Request, res: Response) {
       consumerId,
       "incremental",
     );
+      void startIncrementalExportJob(
+      jobId,
+      consumerId,
+      outputFileName
+    );
     return res.status(202).json({
       jobId,
       status: "started",
@@ -53,6 +58,7 @@ export async function deltaExport(req: Request, res: Response) {
   try {
     const consumerId = getConsumerId(req);
     const { jobId, outputFileName } = createJobMetadata(consumerId, "delta");
+    void startDeltaExportJob(jobId, consumerId, outputFileName);
     return res.status(202).json({
       jobId,
       status: "started",
@@ -96,7 +102,5 @@ export async function getWatermark(req: Request, res: Response) {
     });
     
   }
-  return res.status(200).json({
-    message: "Watermark endpoint",
-  });
+  
 }
