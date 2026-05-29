@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
 import { createJobMetadata } from "../utils/export.util";
 import { getConsumerId } from "../utils/consumer.util";
+import prisma from "../prisma";
+
+import {startFullExportJob} from "../jobs/export.job";
 
 export async function fullExport(req: Request, res: Response) {
   try {
     const consumerId = getConsumerId(req);
     const { jobId, outputFileName } = createJobMetadata(consumerId, "full");
+
+    void startFullExportJob(
+      jobId,
+      consumerId,
+      outputFileName
+    );
 
     return res.status(202).json({
       jobId,
@@ -58,6 +67,35 @@ export async function deltaExport(req: Request, res: Response) {
 }
 
 export async function getWatermark(req: Request, res: Response) {
+  try {
+      const consumerId =
+      getConsumerId(req);
+
+    const watermark =
+      await prisma.watermark.findUnique({
+        where: {
+          consumerId,
+        },
+      });
+
+    if (!watermark) {
+      return res.status(404).json({
+        message:
+          "No watermark found",
+      });
+    }
+
+    return res.status(200).json({
+      consumerId,
+      lastExportedAt:
+        watermark.lastExportedAt,
+    });
+  } catch (error : any) {
+     return res.status(400).json({
+      message: error.message,
+    });
+    
+  }
   return res.status(200).json({
     message: "Watermark endpoint",
   });
