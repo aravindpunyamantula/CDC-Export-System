@@ -14,7 +14,9 @@ export async function startFullExportJob(
                 exportType: "full",
             }));
 
+        const startTime = Date.now();
         await runFullExport(consumerId, outputFilename);
+        const durationMs = Date.now() - startTime;
 
         console.log(
             JSON.stringify({
@@ -22,6 +24,7 @@ export async function startFullExportJob(
                 jobId,
                 consumerId,
                 exportType: "full",
+                 durationMs,
             })
         );
     } catch (error) {
@@ -58,10 +61,14 @@ export async function startIncrementalExportJob(
       })
     );
 
+    const startTime = Date.now();
+
     await runIncrementalExport(
       consumerId,
       outputFilename
     );
+
+    const durationMs = Date.now() - startTime;
 
     console.log(
       JSON.stringify({
@@ -71,6 +78,7 @@ export async function startIncrementalExportJob(
         consumerId,
         exportType:
           "incremental",
+          durationMs,
       })
     );
 
@@ -108,10 +116,14 @@ export async function startDeltaExportJob(
       })
     );
 
+    const startTime = Date.now();
+
     await runDeltaExport(
       consumerId,
       outputFilename
     );
+
+    const durationMs = Date.now() - startTime;
 
     console.log(
       JSON.stringify({
@@ -119,6 +131,7 @@ export async function startDeltaExportJob(
         jobId,
         consumerId,
         exportType: "delta",
+        durationMs,
       })
     );
 
