@@ -224,7 +224,7 @@ Install:
 ## Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/aravindpunyamantula/CDC-Export-System
 cd cdc-export-system
 ```
 
