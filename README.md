@@ -482,7 +482,7 @@ Latest coverage results:
 | Metric     | Coverage |
 | ---------- | -------- |
 | Statements | 90.57%   |
-| Branches   | 50.00%   |
+| Branches   | 80.00%   |
 | Functions  | 94.44%   |
 | Lines      | 90.57%   |
 
